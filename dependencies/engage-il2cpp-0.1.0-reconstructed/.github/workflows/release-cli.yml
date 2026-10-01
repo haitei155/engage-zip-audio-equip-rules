@@ -1,0 +1,70 @@
+name: Release CLI
+
+on:
+  push:
+    tags:
+      - 'cli-v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            archive: tar.gz
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            archive: tar.gz
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache cargo registry & build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: cli
+
+      - name: Build
+        working-directory: cli
+        run: cargo build --release --target ${{ matrix.target }} --bin engage
+
+      - name: Stage artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          STAGE="engage-${{ github.ref_name }}-${{ matrix.target }}"
+          mkdir "$STAGE"
+          if [[ "${{ matrix.target }}" == *windows* ]]; then
+            cp "cli/target/${{ matrix.target }}/release/engage.exe" "$STAGE/"
+          else
+            cp "cli/target/${{ matrix.target }}/release/engage" "$STAGE/"
+          fi
+          cp LICENSE "$STAGE/" || true
+          cp cli/Cargo.toml "$STAGE/Cargo.toml.reference" || true
+          if [[ "${{ matrix.archive }}" == "zip" ]]; then
+            7z a "$STAGE.zip" "$STAGE"
+            echo "ARTIFACT=$STAGE.zip" >> "$GITHUB_ENV"
+          else
+            tar -czf "$STAGE.tar.gz" "$STAGE"
+            echo "ARTIFACT=$STAGE.tar.gz" >> "$GITHUB_ENV"
+          fi
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ARTIFACT }}
+          fail_on_unmatched_files: true

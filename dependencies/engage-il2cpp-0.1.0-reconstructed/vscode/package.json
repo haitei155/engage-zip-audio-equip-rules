@@ -1,0 +1,97 @@
+{
+  "name": "engage-vscode",
+  "displayName": "engage",
+  "description": "Manage engage-il2cpp Cargo features from VS Code",
+  "version": "0.3.1",
+  "publisher": "DivineDragonFanClub",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DivineDragonFanClub/engage-il2cpp"
+  },
+  "license": "MPL-2.0",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/Cargo.toml"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "engage.featuresCheck",
+        "title": "engage: Check features"
+      },
+      {
+        "command": "engage.featuresApply",
+        "title": "engage: Apply missing features"
+      },
+      {
+        "command": "engage.featuresPrune",
+        "title": "engage: Prune unused features"
+      },
+      {
+        "command": "engage.featuresExplain",
+        "title": "engage: Explain feature for path"
+      }
+    ],
+    "configuration": {
+      "title": "engage",
+      "properties": {
+        "engage.binaryPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional override for the engage binary location. Leave empty to use the bundled binary."
+        },
+        "engage.checkOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run features check automatically when a Rust file or Cargo.toml is saved."
+        },
+        "engage.autoApplyOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically add missing engage-il2cpp features to Cargo.toml when a file is saved. Off by default to keep saves side-effect-free."
+        },
+        "engage.autoPruneOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically remove unreferenced engage-il2cpp features from Cargo.toml when a file is saved. Off by default since pruning is destructive."
+        },
+        "engage.autoUpdateCheck": {
+          "type": "string",
+          "enum": [
+            "prompt",
+            "auto",
+            "off"
+          ],
+          "default": "prompt",
+          "description": "How to handle updates from GitHub releases."
+        },
+        "engage.lspEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run engage-lsp for live diagnostics and hover info. Disable to fall back to on-save check only."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -p . --watch",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.4.0"
+  }
+}

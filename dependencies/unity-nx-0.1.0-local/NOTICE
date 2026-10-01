@@ -1,0 +1,22 @@
+Third-party software notices
+============================
+
+This repository is distributed under the Mozilla Public License,
+version 2.0. The full text of the license is included in the file
+LICENSE-MPL at the root of this repository and is also available at
+https://mozilla.org/MPL/2.0/.
+
+godot-rust
+----------
+
+Files:
+  unity-macro/src/util/mod.rs
+  unity-macro/src/util/kv_parser.rs
+
+Source:     https://github.com/godot-rust/gdext
+Copyright:  godot-rust; Bromeon and contributors
+License:    Mozilla Public License, version 2.0
+
+The listed files contain code derived from the godot-rust project. They
+carry the original godot-rust copyright notice at the top of each file
+and remain under the Mozilla Public License, version 2.0.

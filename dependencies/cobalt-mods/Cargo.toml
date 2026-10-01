@@ -1,0 +1,16 @@
+[package]
+name = "mods"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+camino = "1.0.7"
+thiserror = "1.0.30"
+rawzip = "0.4"
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
+dependency-graph = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9.34"
+nnsdk = "0.6"

@@ -1,0 +1,7 @@
+[package]
+name = "cobalt-nro-converter"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[dependencies]
+linkle = { path = "../dependencies/linkle-0.2.11" }

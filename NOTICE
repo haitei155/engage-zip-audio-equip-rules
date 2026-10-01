@@ -1,0 +1,8 @@
+engage-zip-audio-equip-rules
+Project-owned additions and documentation: Apache License 2.0.
+Third-party and upstream-derived portions retain their original notices and terms.
+
+Required runtime: Cobalt — https://github.com/Raytwo/Cobalt
+Thank you to Raytwo for Cobalt and its mod-loading foundation.
+
+See THIRD_PARTY.md for source attribution and licensing scope.

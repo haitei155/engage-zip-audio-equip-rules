@@ -1,0 +1,29 @@
+[workspace]
+
+[package]
+name = "engage"
+version = "0.1.0"
+edition = "2021"
+description = "Discover and apply the engage-il2cpp Cargo features your code actually uses"
+
+[[bin]]
+name = "engage"
+path = "src/bin/engage.rs"
+
+[[bin]]
+name = "engage-lsp"
+path = "src/bin/engage-lsp.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+toml_edit = "0.22"
+syn = { version = "2", features = ["full", "visit", "extra-traits"] }
+proc-macro2 = { version = "1", features = ["span-locations"] }
+walkdir = "2"
+cargo_metadata = "0.18"
+tower-lsp = "0.20"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "io-std", "sync"] }

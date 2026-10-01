@@ -1,0 +1,15 @@
+{
+  "project": "engage-zip-audio-equip-rules",
+  "crate_name": "engage_zip_audio_equip_rules",
+  "nro": "engage_zip_audio_equip_rules.nro",
+  "game": "Fire Emblem Engage",
+  "game_version": "2.0.0",
+  "cobalt_baseline": "1.31.0",
+  "license": "Apache-2.0 (project-owned contributions; see THIRD_PARTY.md)",
+  "prepared": "2026-10-02",
+  "source_status": "Release source snapshot; see Releases/RELEASE_NOTES.md for binary provenance and validation.",
+  "integration_package": "12 Emblems + Lumera",
+  "release_tag": "v0.1",
+  "published": true,
+  "repository": "https://github.com/haitei155/engage-zip-audio-equip-rules"
+}

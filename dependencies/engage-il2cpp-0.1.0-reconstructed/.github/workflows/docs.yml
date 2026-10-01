@@ -1,0 +1,131 @@
+name: Docs
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: false
+      - name: Add 24G swapfile
+        run: |
+          sudo swapoff -a
+          sudo fallocate -l 24G /mnt/swapfile
+          sudo chmod 600 /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
+          free -h
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          target: x86_64-unknown-linux-gnu
+      - name: Configure cache
+        uses: Swatinem/rust-cache@v2
+      - name: Install Skyline
+        run: |
+          cargo install --git https://github.com/jam1garner/cargo-skyline
+      - name: Update Switch STD
+        run: |
+          cargo-skyline skyline update-std
+      - name: Setup pages
+        id: pages
+        uses: actions/configure-pages@v4
+      - name: Clean docs folder
+        run: cargo clean --doc
+      - name: Write target spec
+        run: |
+          cat > $HOME/.cargo/skyline/aarch64-skyline-switch.json <<EOF
+          {
+              "arch": "aarch64",
+              "crt-static-default": false,
+              "crt-static-respected": false,
+              "data-layout": "e-m:e-p270:32:32-p271:32:32-p272:64:64-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128-Fn32",
+              "dynamic-linking": true,
+              "executables": true,
+              "has-rpath": false,
+              "linker": "rust-lld",
+              "linker-flavor": "ld.lld",
+              "llvm-target": "aarch64-unknown-none",
+              "max-atomic-width": 128,
+              "os": "switch",
+              "target-family": null,
+              "env": "",
+              "disable-redzone": true,
+              "panic-strategy": "abort",
+              "position-independent-executables": true,
+              "pre-link-args": {
+                "ld.lld": [
+                  "-T$HOME/.cargo/skyline/link.T",
+                  "-init=__custom_init",
+                  "-fini=__custom_fini",
+                  "--export-dynamic"
+                ]
+              },
+              "post-link-args": {
+                "ld.lld": [
+                  "--no-gc-sections",
+                  "--eh-frame-hdr"
+                ]
+              },
+              "relro-level": "off",
+              "target-c-int-width": 32,
+              "target-endian": "little",
+              "target-pointer-width": 64,
+              "features": "+v8a,+neon,+crypto,+crc",
+              "vendor": "jam1garner"
+          }
+          EOF
+      - name: Build docs
+        env:
+          RUSTFLAGS: "--cfg skyline_std_v3 -Cdebuginfo=0 -Ccodegen-units=1"
+          RUSTDOCFLAGS: "-Cdebuginfo=0 -Ccodegen-units=1"
+          SKYLINE_ADD_NRO_HEADER: "1"
+          CARGO_INCREMENTAL: "0"
+          CARGO_PROFILE_DOC_DEBUG: "0"
+          CARGO_PROFILE_DEV_DEBUG: "0"
+        run: |
+          rustup run skyline-v3 cargo doc \
+            --target $HOME/.cargo/skyline/aarch64-skyline-switch.json \
+            -Z json-target-spec \
+            -Z build-std=core,alloc,std,panic_abort \
+            --features all \
+            --no-deps \
+            -j 1
+      - name: Add redirect
+        run: echo '<meta http-equiv="refresh" content="0;url=engage/index.html">' > target/aarch64-skyline-switch/doc/index.html
+      - name: Remove lock file
+        run: rm target/aarch64-skyline-switch/doc/.lock
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: target/aarch64-skyline-switch/doc
+  deploy:
+    name: Deploy
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

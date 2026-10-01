@@ -1,0 +1,27 @@
+[package]
+name = "engage_zip_audio_equip_rules"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+
+[workspace]
+exclude = ["dependencies/engage-il2cpp-0.1.0-reconstructed", "tools/nro-converter"]
+
+[dependencies]
+skyline = "0.6"
+horizon-svc = { path = "dependencies/horizon-svc", features = ["svc-impl"] }
+camino = "1.0.7"
+unity-nx = { path = "dependencies/unity-nx-0.1.0-local" }
+engage-il2cpp = { path = "dependencies/engage-il2cpp-0.1.0-reconstructed", default-features = false, features = ["app-unit", "app-godunit", "app-goddata", "app-persondata", "app-basicmenuitem", "app-unitring"] }
+mods = { path = "dependencies/cobalt-mods" }
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+panic = "abort"
+lto = "thin"
+strip = true
+
+[patch.crates-io]
+getrandom = { git = "https://github.com/skyline-rs/getrandom" }
