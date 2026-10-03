@@ -19,7 +19,7 @@ The current binary targets Fire Emblem Engage 2.0.0 with Cobalt 1.31.0 as its co
 
 After configuring a custom added character's same-name emblem pair, that character cannot equip the corresponding emblem ring or bracelet. In this screenshot, the Eirika emblem entry is disabled for playable Eirika, while other entries remain selectable.
 
-![Playable Eirika cannot equip her own same-name emblem bracelet](images/same-character-emblem-equipment-restriction.png)
+![Playable Eirika cannot equip her own same-name emblem bracelet](images/same-character-emblem-equipment-restriction.jpg)
 
 Future added characters are supported by supplying the corresponding PID/GID rules in their mod; the current implementation does not automatically compare display names. See [Equipment rule configuration](docs/CONFIGURATION.md). This screenshot illustrates equipment restrictions; ZIP audio caching is described separately above.
 

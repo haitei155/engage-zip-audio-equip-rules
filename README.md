@@ -19,7 +19,7 @@
 
 对自定义新增角色配置同名纹章士配对规则后，该角色无法装备对应纹章士的戒指／手镯。下图中，可用普通人物艾莉可对应的纹章士艾莉可条目已被禁用；其他条目继续保留正常选择。
 
-![艾莉可无法装备自己的同名纹章士手镯](images/same-character-emblem-equipment-restriction.png)
+![艾莉可无法装备自己的同名纹章士手镯](images/same-character-emblem-equipment-restriction.jpg)
 
 该机制适用于今后新增的角色，但角色 MOD 需要提供对应的 PID/GID 规则；当前实现不会只比较显示名称就自动限制。配置方法见 [装备规则说明](docs/CONFIGURATION.md)。图中展示的是装备限制，ZIP 语音缓存功能另见上方说明。
 
