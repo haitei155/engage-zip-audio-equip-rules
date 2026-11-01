@@ -6,7 +6,7 @@
 
 **必须先安装 [Cobalt](https://github.com/Raytwo/Cobalt)。** 感谢 **Raytwo** 开发并维护 Cobalt，为本项目提供 MOD 加载与扩展基础。
 
-当前编译版面向《火焰纹章 Engage》2.0.0，使用 Cobalt 1.31.0 作为兼容基线。
+当前编译版面向《火焰纹章 Engage》2.0.0，使用 [Cobalt 1.31.0](https://github.com/Raytwo/Cobalt) 作为兼容基线。
 
 ## 功能
 
